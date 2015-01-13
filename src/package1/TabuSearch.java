@@ -9,18 +9,19 @@ import java.util.Set;
 public class TabuSearch<T> {
 
     private static final String filename = "src/package1/graph.txt";
-    private static int MAX_TRIES = 5;
+    private static int HOW_MANY_TRIES = 7;
     private Graph<T> graph;
     private static int[] memory;
-    private static int j = 4;
+    private static int j = 6;
 
     public static void main(String[] args) throws IOException {
         Graph<String> g = new GraphInstance(filename);
-        TabuSearch<String> ts = new TabuSearch<String>(g);
+        TabuSearch<String> tabuSearch = new TabuSearch<String>(g);
         long time = System.currentTimeMillis();
-        ts.color();
-        System.out.println(System.currentTimeMillis() - time);
-        //GraphExporter.exportGraph("ts", g);
+        int best =  tabuSearch.color();
+        System.out.println("Hello world");
+        System.out.println(System.currentTimeMillis() - time + " milisekund. Potrzeba kolorów: " + best);
+        //GraphExporter.exportGraph("tabuSearch", g);
     }
 
     private class State {
@@ -33,7 +34,7 @@ public class TabuSearch<T> {
         }
     }
 
-    private class Solution {
+    public class Solution {
 
         Set<State> states;
         int index;
@@ -55,7 +56,7 @@ public class TabuSearch<T> {
             int i = 0;
             for (T info : graph.DFS()) {
                 if (memory[i] == 0) {
-                    // System.out.println("Analizando: " + info);
+
                     Set<State> aux = new HashSet<State>();
                     if (changeColor(info, aux)) {
                         aux.addAll(states);
@@ -98,16 +99,16 @@ public class TabuSearch<T> {
         this.graph = graph;
     }
 
-    public void color() {
+    public int color() {
         memory = new int[graph.vertexCount()];
         Solution localSolution = initialSolution();
         Solution bestSolution = localSolution;
         int localSolEval = localSolution.evaluate(), bestSolEval = localSolEval;
-        for (int i = 0; i < MAX_TRIES; i++) {
+        for (int i = 0; i < HOW_MANY_TRIES; i++) {
             for (Solution neighbor : localSolution.neighbors()) {
                 int neighborSolEval = neighbor.evaluate();
                 if (localSolEval > neighborSolEval) {
-                    System.out.println("asdasdasd");
+                    System.out.println("can be better");
                     localSolution = neighbor;
                     localSolEval = neighborSolEval;
                     memory[localSolution.index] = j;
@@ -117,7 +118,7 @@ public class TabuSearch<T> {
                 if (memory[k] != 0)
                     memory[k]--;
             if (localSolEval > bestSolEval) {
-                System.out.println("Mejoro");
+                System.out.println("Better");
                 bestSolution = localSolution;
                 bestSolEval = localSolEval;
             }
@@ -125,6 +126,7 @@ public class TabuSearch<T> {
         for (State state : bestSolution.states) {
             graph.setColor(state.info, state.color);
         }
+        return bestSolution.evaluate();
     }
 
     private Solution initialSolution() {

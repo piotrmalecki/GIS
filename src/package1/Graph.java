@@ -1,10 +1,8 @@
 package package1;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Piotr on 2015-01-12.
@@ -44,17 +42,9 @@ public class Graph<V> {
     }
 
     private HashMap<V, Node> nodes;
-    private List<State<V>> colored;
-
-    private List<Integer> quantColor;
-
-    private int usedColors;
 
     public Graph() {
         this.nodes = new HashMap<V, Node>();
-        this.colored = new ArrayList<State<V>>();
-        this.usedColors = 0;
-        this.quantColor = new ArrayList<Integer>();
     }
 
     public void addVertex(V vertex) {
@@ -137,7 +127,6 @@ public class Graph<V> {
     public void setColor(V info, int color) {
         nodes.get(info).color = color;
     }
-
 
     public List<V> neighborsColor(V info) {
         List<V> ans = new ArrayList<V>();

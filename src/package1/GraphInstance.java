@@ -16,7 +16,7 @@ public class GraphInstance extends Graph<String> {
         super();
         List<Integer> list2 = ReadFile(FileName);
         int nodeNumber = list2.get(0);
-        for (int i = 0; i < nodeNumber; i++) {
+        for (int i = 1; i <= nodeNumber; i++) {
             this.addVertex(String.valueOf(i));
         }
         for (int i= 1; i<list2.size(); i= i+2)
